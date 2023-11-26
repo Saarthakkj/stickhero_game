@@ -1,0 +1,26 @@
+.root {
+    -fx-background-image: url("cartoon-game-background-260nw-303257369.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+.label {
+    -fx-font-family: "Futura";
+    -fx-alignment: center;
+    -fx-font-weight: bold; /* Apply bold to all labels */
+}
+
+#label1 {
+    -fx-font-weight: bold;
+}
+/* Circular Button Style */
+.circular-button {
+    -fx-background-radius: 50%;
+    -fx-background-color: #ff0000; /* Change this color as needed */
+    -fx-text-fill: white; /* Set the text color */
+}
+.circular-button-2 {
+    -fx-background-radius: 50%;
+    -fx-background-color: white; /* Change this color as needed */
+    -fx-text-fill: black;/* Circular shape */
+}
