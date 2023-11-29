@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.stick.HelloController">
+  <padding>
+    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+  </padding>
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0">
+      <children>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9299a171" height="88.0" layoutX="259.0" layoutY="369.0" stroke="BLACK" strokeType="INSIDE" width="310.0" />
+         <Text fill="#fffefe" layoutX="284.0" layoutY="85.0" opacity="0.86" strokeType="OUTSIDE" strokeWidth="0.0" text="Stick Hero" textAlignment="CENTER" wrappingWidth="231.21630859375">
+            <font>
+               <Font size="48.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="777.0" fitWidth="840.0" layoutX="-20.0" layoutY="-19.0">
+            <image>
+               <Image url="@../../../../../../../../Downloads/b1.jpeg" />
+            </image>
+         </ImageView>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#939ba38c" height="88.0" layoutX="260.0" layoutY="382.0" stroke="BLACK" strokeType="INSIDE" width="310.0" />
+         <Text layoutX="332.0" layoutY="444.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy" wrappingWidth="81.42089881002903">
+            <font>
+               <Font size="49.0" />
+            </font>
+         </Text>
+         <ImageView fitHeight="72.0" fitWidth="92.0" layoutX="421.0" layoutY="390.0" preserveRatio="true">
+            <image>
+               <Image url="@../../../../../../../../Downloads/Screenshot_2023-11-29_at_6.59.03_PM-removebg-preview.png" />
+            </image>
+         </ImageView>
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9299a139" height="88.0" layoutX="259.0" layoutY="484.0" stroke="BLACK" strokeType="INSIDE" width="310.0" />
+         <Text layoutX="357.0" layoutY="546.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Play" textAlignment="CENTER">
+            <font>
+               <Font size="49.0" />
+            </font>
+         </Text>
+         <Text fill="#8bd9a5ef" layoutX="247.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Stick Hero" textAlignment="CENTER">
+            <font>
+               <Font size="67.0" />
+            </font>
+         </Text>
+         <AnchorPane layoutX="73.0" layoutY="538.0" prefHeight="129.0" prefWidth="116.0">
+            <children>
+               <ImageView fitHeight="127.0" fitWidth="151.0">
+                  <image>
+                     <Image url="@../../../../../../../../Downloads/Screenshot_2023-11-29_at_7.56.21_PM-removebg-preview.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </AnchorPane>
+         <AnchorPane layoutX="649.0" layoutY="557.0">
+            <children>
+               <ImageView fitHeight="83.0" fitWidth="59.0" layoutX="-15.0" preserveRatio="true">
+                  <image>
+                     <Image url="@../../../../../../../../Downloads/Screenshot_2023-11-29_at_7.57.17_PM-removebg-preview.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </AnchorPane>
+         <ImageView fitHeight="82.0" fitWidth="81.0" layoutX="504.0" layoutY="572.0" preserveRatio="true">
+            <image>
+               <Image url="@../../../../../../../../Downloads/Screenshot_2023-11-29_at_8.01.38_PM-removebg-preview.png" />
+            </image>
+         </ImageView>
+         <ImageView fitHeight="145.0" fitWidth="181.0" layoutX="309.0" layoutY="121.0" preserveRatio="true">
+            <image>
+               <Image url="@../../../../../../../../Downloads/Screenshot_2023-11-29_at_8.00.46_PM-removebg-preview.png" />
+            </image>
+         </ImageView>
+      </children></AnchorPane>
+
+  <Label fx:id="welcomeText" />
+</VBox>
