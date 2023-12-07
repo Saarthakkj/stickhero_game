@@ -1,29 +1,30 @@
 package application;
-	
-import java.io.IOException;
-import java.util.ArrayList;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.stage.Stage;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.util.ArrayList;
+
+import application.Main.Stick;
 
 
 public class Main extends Application {
+		
+	private Stage stage;
 	
 	@Override
 	public void start(Stage stage){
@@ -48,173 +49,267 @@ public class Main extends Application {
 		
 	}
 	
+	private void showSecondStage() {
+        // Create the second stage
+        Stage secondaryStage = new Stage();
+        secondaryStage.setTitle("Second Stage");
+        Button secondaryButton = new Button("Switch to Primary Stage");
+        secondaryButton.setOnAction(event -> showPrimaryStage());
+        Scene secondaryScene = new Scene(secondaryButton, 300, 200);
+        secondaryStage.setScene(secondaryScene);
+        
+        // Set the owner stage (optional but useful for modality)
+        secondaryStage.initOwner(stage);
+
+        // Show the second stage
+        secondaryStage.show();
+    }
+	
+	private void showPrimaryStage() {
+        // Bring the primary stage to the front if it's behind the secondary stage
+        stage.toFront();
+    }
+	
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
-	class Animation {
-	    private Stick stick;
-	    private Player player;
-	    private Cherry cherry;
+class Animations {
+    private Stick stick;
+    private Player player;
+    private Cherry cherry;
 
-	    public Animation() {
-	        stick = new Stick();
-	        player = new Player();
-	        cherry = new Cherry(0, 0);
-	    }
+    public Animations() {
+        stick = new Stick();
+        player = new Player();
+        cherry = new Cherry(0, 0);
 
-	    private void stick_stretch() {
-	        // Code to stretch the stick using the stick object
-	        stick.stretch();
-	    }
+        // Set up mouse event handlers
+        stick.setOnMousePressed(this::handleMousePressed);
+        stick.setOnMouseReleased(this::handleMouseReleased);
+    }
 
-	    private void player_moving() {
-	        // Code to move the player using the player object
-	        player.moveCharacter();
-	    }
+    private void handleMousePressed(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            startStickGrowth(); // Start stretching the stick
+        }
+    }
 
-	    private void button_hovering() {
-	        // Code for button hovering animation
-	    }
-	    private void cherry_hovering() {
-	        // Code for cherry hovering using the cherry object
+    private void handleMouseReleased(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            stopStickGrowth(); // Stop stretching the stick
+        }
+    }
+
+    private void startStickGrowth() {
+        stick.startStretch(); // Correctly start the stick growth animation
+    }
+
+    private void stopStickGrowth() {
+        stick.stopStretch(); // Stop the stick growth animation
+        // Rotate the stick by 90 degrees when growth stops
+        stick.setRotate(stick.getRotate() + 90);
+    }
+
+    public Stick getStick() {
+        return stick;
+    }
+
+    private void player_moving() {
+        // Code to move the player using the player object
+        player.moveCharacter();
+    }
+
+    private void button_hovering() {
+        // Code for button hovering animation
+    }
+
+    private void cherry_hovering() {
+        // Code for cherry hovering using the cherry object
 	        cherry.hover();
 	    }
-	}
+}
 
-	class Stick {
-	    private double length;
-	    private double position;
+//animated stick :
+class Stick extends Rectangle {
+    private static final double MAX_HEIGHT = 300.0; // Maximum height of the stick
+    private static final double GROWTH_STEP = 1.0; // Growth step per iteration
+    private Timeline growthAnimation;
 
-	    public void stretch() {
-	        // Stretch the stick based on user input or animation
-	        // Iterate the length
-	    }
+    public Stick() {
+        super(50, 340, 5, 10); // x, y, width, height
+        this.setFill(Color.BLACK); // Set the fill color of the stick
 
-	    public void fall() {
-	        // Make the stick fall towards the target platform
-	    }
+        // Initialize the growth animation
+        growthAnimation = new Timeline(new KeyFrame(Duration.millis(20), e -> grow()));
+        growthAnimation.setCycleCount(Animation.INDEFINITE);
 
-	    public double getLength() {
-	        return length;
-	    }
+        // Set up mouse event handlers
+        this.setOnMousePressed(this::handleMousePressed);
+        this.setOnMouseReleased(this::handleMouseReleased);
+    }
 
-	    public double getPosition() {
-	        return position;
-	    }
+    private void grow() {
+        if (this.getHeight() + GROWTH_STEP <= MAX_HEIGHT) {
+            this.setHeight(this.getHeight() + GROWTH_STEP);
+        } else {
+            stopStretch(); // Stop the stretching if max height is reached
+        }
+    }
 
-	    // Reset method for restoring stick's length
-	    public void reset() {
-	        length = 0;
-	    }
-	}
+    private void handleMousePressed(MouseEvent event) {
+        if (event.isPrimaryButtonDown()) {
+            startStretch(); // Start stretching the stick
+        }
+    }
 
-	class Cherry {
-	    private Point2D location;
+    private void handleMouseReleased(MouseEvent event) {
+        if (event.isPrimaryButtonDown()) {
+            stopStretch(); // Stop stretching the stick
+        }
+    }
 
-	    public Cherry(double x, double y) {
-	        location = new Point2D(x, y);
-	    }
+    public void startStretch() {
+        growthAnimation.play();
+    }
 
-	    public Point2D getLocation() {
-	        return location;
-	    }
+    public void stopStretch() {
+        growthAnimation.stop();
+    }
 
-	    public void hover() {
-	    }
-	}
+    public double getCurrentHeight() {
+        return this.getHeight();
+    }
+}
 
-	class CherryManager {
-	    private ArrayList<Cherry> cherries;
-	    private int cherryCount;
 
-	    public void addCherry(double x, double y) {
-	        cherries.add(new Cherry(x, y));
-	    }
+// this is a demo stick class : (use it for later declaring methods.)
+//	class Stick {
+//	    private double length;
+//	    private double position;
+//
+//	    public void stretch() {
+//	        // Stretch the stick based on user input or animation
+//	        // Iterate the length
+//	    }
+//
+//	    public void fall() {
+//	        // Make the stick fall towards the target platform
+//	    }
+//
+//	    public double getLength() {
+//	        return length;
+//	    }
+//
+//	    public double getPosition() {
+//	        return position;
+//	    }
+//
+//	    // Reset method for restoring stick's length
+//	    public void reset() {
+//	        length = 0;
+//	    }
+//	}
 
-	    public void collectCherry() {
-	        cherryCount++;
-	    }
+class Cherry {
+    private Point2D location;
 
-	    public void useCherries(int amount) {
-	        cherryCount -= amount;
-	    }
+    public Cherry(double x, double y) {
+        location = new Point2D(x, y);
+    }
 
-	    public ArrayList<Cherry> getCherries() {
-	        return cherries;
-	    }
+    public Point2D getLocation() {
+        return location;
+    }
 
-	    public int getCherryCount() {
-	        return cherryCount;
-	    }
-	}
+    public void hover() {
+    }
+}
 
-	class Player {
-	    private CherryManager cherryManager;
-	    private int revivalCost = 5;
+class CherryManager {
+    private ArrayList<Cherry> cherries;
+    private int cherryCount;
 
-	    public Player() {
-	        this.cherryManager = cherryManager;
-	    }
+    public void addCherry(double x, double y) {
+        cherries.add(new Cherry(x, y));
+    }
 
-	    void moveCharacter() {
-	        // Handles the movement of the stick-hero character between platforms
-	    }
+    public void collectCherry() {
+        cherryCount++;
+    }
 
-	    void stretchStick() {
-	        // Stretches out the stick to bridge the gaps between platforms
-	    }
+    public void useCherries(int amount) {
+        cherryCount -= amount;
+    }
 
-	    void collectCherries() {
-	        cherryManager.collectCherry();
-	        // Collects cherries and increases cherry_count
-	    }
+    public ArrayList<Cherry> getCherries() {
+        return cherries;
+    }
 
-	    void revive() {
-	        if (cherryManager.getCherryCount() >= revivalCost) {
-	            // Revive the player
-	            cherryManager.useCherries(revivalCost);
-	            // Additional logic for reviving the player goes here
-	        } else {
-	            // Display a message or take other actions if the player doesn't have enough cherries to revive
-	        }
-	    }
+    public int getCherryCount() {
+        return cherryCount;
+    }
+}
 
-	    void flipCharacter() {
-	        // Flips the character upside down to collect rewards
-	    }
-	}
+class Player {
+    private CherryManager cherryManager;
+    private int revivalCost = 5;
 
-	class Platform {
-	    private int width;
+    public Player() {
+        this.cherryManager = cherryManager;
+    }
 
-	    void getWidth() {
-	        // Get the width of the platform
-	    }
-	}
+    void moveCharacter() {
+        // Handles the movement of the stick-hero character between platforms
+    }
 
-	class StartGameScreen {
-	    public void levelSelection() {
-	        // Code for level selection screen
-	    }
+    void stretchStick() {
+        // Stretches out the stick to bridge the gaps between platforms
+    }
 
-	    public void startGame() {
-	        // Code for the start game screen
-	    }
-	}
+    void collectCherries() {
+        cherryManager.collectCherry();
+        // Collects cherries and increases cherry_count
+    }
 
-	class DuringGameScreen {
-	    public void duringGame() {
-	        //Code for the gameplay phase
-	    }
-	}
+    void revive() {
+        if (cherryManager.getCherryCount() >= revivalCost) {
+            // Revive the player
+            cherryManager.useCherries(revivalCost);
+            // Additional logic for reviving the player goes here
+        } else {
+            // Display a message or take other actions if the player doesn't have enough cherries to revive
+        }
+    }
 
-	class EndGameScreen {
-	    public void endGame() {
-	        // Code for the end game screen
-	    }
-	}
+    void flipCharacter() {
+        // Flips the character upside down to collect rewards
+    }
+}
+
+//	class StartGameScreen {
+//	    public void levelSelection() {
+//	        // Code for level selection screen
+//	    }
+//
+//	    public void startGame() {
+//	        // Code for the start game screen
+//	    }
+//	}
+//
+//	class DuringGameScreen {
+//	    public void duringGame() {
+//	        //Code for the game play  phase
+//	    }
+//	}
+//
+//	class EndGameScreen{
+//	    public void endGame() {
+//	        // Code for the end game screen
+//	    }
+//	}
+	
 }
 //		we need a root node in the constructor of scene
 //		Basic type of root node: group
