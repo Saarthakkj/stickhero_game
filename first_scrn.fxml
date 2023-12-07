@@ -9,12 +9,10 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
    <children>
-      <Button fx:id="play" layoutX="107.0" layoutY="227.0" mnemonicParsing="false" onAction="#switchTogameplay" prefHeight="88.0" prefWidth="86.0" styleClass="circular-button" text="Play" textAlignment="CENTER" textFill="WHITE">
+      <Button fx:id="play" layoutX="107.0" layoutY="227.0" mnemonicParsing="false" onAction="#switchTosecond_scrn" prefHeight="88.0" prefWidth="86.0" styleClass="circular-button" text="Play" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="18.0" />
-         </font></Button> 
-	  <!-- Circular Button with Larger Image -->
-		<Button fx:id="plyr" layoutX="225.0" layoutY="372.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="52.0" styleClass="circular-button-2" />
+         </font></Button>
    
 	  <Button fx:id="help" layoutX="25.0" layoutY="374.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="52.0" styleClass="circular-button-2" text="?">
          <font>
@@ -31,10 +29,5 @@
             <Image url="@player3.png" />
          </image>
       </ImageView>
-		        <ImageView fitHeight="80.0" fitWidth="112.0" layoutX="195.0" layoutY="356.0">
-		            <image>
-		                <Image url="@player3.png" />
-		            </image>
-		        </ImageView>
    </children>
 </AnchorPane>

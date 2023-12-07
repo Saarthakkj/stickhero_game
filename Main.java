@@ -2,6 +2,7 @@ package application;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -131,56 +132,72 @@ class Animations {
 	    }
 }
 
+
 //animated stick :
+//aniamted stick :
 class Stick extends Rectangle {
-    private static final double MAX_HEIGHT = 300.0; // Maximum height of the stick
-    private static final double GROWTH_STEP = 1.0; // Growth step per iteration
-    private Timeline growthAnimation;
+  private static final double MAX_HEIGHT = 300.0;
+  private static final double GROWTH_STEP = 1.0;
+  private static final double ROTATION_DURATION = 500; // Milliseconds for rotation duration
+  private Timeline growthAnimation;
+  private Timeline rotationAnimation;
+  private boolean isGrowing = false; // Flag to manage the stick's growth state
 
-    public Stick() {
-        super(50, 340, 5, 10); // x, y, width, height
-        this.setFill(Color.BLACK); // Set the fill color of the stick
+  public Stick() {
+      super(50, 340, 5, 10);
+      this.setFill(Color.BLACK);
 
-        // Initialize the growth animation
-        growthAnimation = new Timeline(new KeyFrame(Duration.millis(20), e -> grow()));
-        growthAnimation.setCycleCount(Animation.INDEFINITE);
+      growthAnimation = new Timeline(new KeyFrame(Duration.millis(20), e -> grow()));
+      growthAnimation.setCycleCount(Timeline.INDEFINITE);
 
-        // Set up mouse event handlers
-        this.setOnMousePressed(this::handleMousePressed);
-        this.setOnMouseReleased(this::handleMouseReleased);
-    }
+      rotationAnimation = new Timeline(new KeyFrame(Duration.millis(ROTATION_DURATION), e -> rotate()));
+      rotationAnimation.setCycleCount(1); // Only rotate once
 
-    private void grow() {
-        if (this.getHeight() + GROWTH_STEP <= MAX_HEIGHT) {
-            this.setHeight(this.getHeight() + GROWTH_STEP);
-        } else {
-            stopStretch(); // Stop the stretching if max height is reached
-        }
-    }
+      this.setOnMousePressed(event -> handleMousePressed());
+  }
 
-    private void handleMousePressed(MouseEvent event) {
-        if (event.isPrimaryButtonDown()) {
-            startStretch(); // Start stretching the stick
-        }
-    }
+  private void grow() {
+      if (this.getHeight() + GROWTH_STEP <= MAX_HEIGHT) {
+          this.setHeight(this.getHeight() + GROWTH_STEP);
+          this.setY(this.getY() - GROWTH_STEP);
+      } else {
+          stopStretch();
+      }
+  }
 
-    private void handleMouseReleased(MouseEvent event) {
-        if (event.isPrimaryButtonDown()) {
-            stopStretch(); // Stop stretching the stick
-        }
-    }
+  private void handleMousePressed() {
+      if (!isGrowing) {
+          startStretch();
+      } else {
+          stopStretch();
+          fall();
+      }
+  }
 
-    public void startStretch() {
-        growthAnimation.play();
-    }
+  private void startStretch() {
+      isGrowing = true;
+      growthAnimation.play();
+  }
 
-    public void stopStretch() {
-        growthAnimation.stop();
-    }
+  private void stopStretch() {
+      isGrowing = false;
+      growthAnimation.stop();
+  }
 
-    public double getCurrentHeight() {
-        return this.getHeight();
-    }
+  private void fall() {
+      rotationAnimation.setOnFinished(event -> rotate());
+      rotationAnimation.play();
+  }
+
+  private void rotate() {
+      this.setRotate(90);
+      this.setTranslateX(this.getHeight()/2-2.5);
+      this.setTranslateY(this.getHeight()/2);
+  }
+
+  public double getCurrentHeight() {
+      return this.getHeight();
+  }
 }
 
 

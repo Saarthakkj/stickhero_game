@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 
+import application.Main.Stick;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,24 +71,22 @@ public class SceneController {
 	
 	
 	public void switchToeasy_gameplay(ActionEvent event) throws IOException {
-	    // Load the FXML file
-	    Parent root = FXMLLoader.load(getClass().getResource("easy_gameplay.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("easy_gameplay.fxml"));
+        
+        Pane easy_gamepane = (Pane) loader.load();
+        
+        Main main_obj = new Main();
+        
+        Stick stick = main_obj.new Stick() ; // Create the stick
+        EasyPlatform easyPlatform = new EasyPlatform(easy_gamepane, stick , 100); // Initialize EasyPlatform with the stick
 
-	    // Create a new AnchorPane for each scene
-	    AnchorPane easyGamePane = new AnchorPane();
-	    easyGamePane.getChildren().add(root);
-
-	    // Create the scene with the new AnchorPane
-	    Scene scene = new Scene(easyGamePane);
-
-	    // Pass the easyGamePane to EasyPlatform for further modifications
-	    EasyPlatform easyPlatform = new EasyPlatform(easyGamePane);
-
-	    // Set the scene to the stage
-	    Stage stage_easy = (Stage) ((Node) event.getSource()).getScene().getWindow();
-	    stage_easy.setScene(scene);
-	    stage_easy.show();
-	}
+        Scene scene = new Scene(easy_gamepane);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+        
+        //easyPlatform.initializePlatforms();
+    }
 
 	
 	

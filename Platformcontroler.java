@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 
 import application.Main.Stick;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,21 +12,21 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 abstract class Platform {
 	@FXML
-    protected int width;
+    protected static int width;
 		
-	protected Rectangle platformShape;
+	
 	
 	public Platform(int width) {
         this.width = width;
-        this.platformShape = new Rectangle(width, 20); // Assuming a fixed height for platforms
         // Set other properties of the platformShape as needed
     }
 
-    int getWidth() {
+    static int getWidth() {
         return width;// Get the width of the platform
     }
 
@@ -36,17 +37,75 @@ abstract class Platform {
 	
 }
 class EasyPlatform extends Platform {
+	
+	protected int width = 10;
+	protected Rectangle easy_platform_rec;
+	private static int distanceBetweenPlatforms;
+	private static double lastPlatformPosition;
+	private final int initialPlatformCount = 3;
+	
 	@FXML
-    private Pane easy_gamepane = SceneController.geteasy_gamepane(); // This is linked to the Pane in your FXML file
-	Main main_obj = new Main();
-	private Stick stick = main_obj.new Stick();
+    private static Pane easy_gamepane ; // This is linked to the Pane in your FXML file
+	
 
-    public EasyPlatform(Pane easy_gamepane) {
-        super(150); // Wider platform for easier game play
-        easy_gamepane.getChildren().add(stick); // Add the stick to the gameplayPane 
+    public EasyPlatform(Pane easy_gamepane , Stick stick , int distanceBetweenPlatforms ) {
+        super(50); // Wider platform for easier game play
+        easy_gamepane.getChildren().add(stick); // Add the stick to the gameplayPane        
+        for (int i = 0; i < initialPlatformCount; i++) {
+        	Rectangle platform = new Rectangle(getWidth(), 150);
+            platform.setLayoutX(lastPlatformPosition);
+            platform.setLayoutY(350); // Assuming platforms are at the bottom
+            platform.setFill(Color.WHITE);
+            easy_gamepane.getChildren().add(platform);
+            lastPlatformPosition += distanceBetweenPlatforms;
+        }
     }
-   
+    public void playerMoved(double playerPositionX) {
+    	// Check if it's time to generate a new platform
+        if (playerPositionX - lastPlatformPosition >= distanceBetweenPlatforms) {
+            generatePlatform();
+            lastPlatformPosition += distanceBetweenPlatforms;
+        }
+        
+    }
+
+//    public void initializePlatforms() {
+//        // Perform additional initializations here, if needed
+//        // For example, generating initial platforms
+//        for (int i = 0; i < initialPlatformCount; i++) {
+//            generatePlatform();
+//            lastPlatformPosition += distanceBetweenPlatforms;
+//        }
+//    }
+    private void generatePlatform() {
+    	Rectangle platform = new Rectangle(getWidth(), 150);
+        platform.setLayoutX(lastPlatformPosition);
+        platform.setLayoutY(350); // Assuming platforms are at the bottom
+        platform.setFill(Color.WHITE);
+        easy_gamepane.getChildren().add(platform);
+        lastPlatformPosition += distanceBetweenPlatforms;
+    }
+    
+    
+//    public static void main(String[] args) {
+//    	lastPlatformPosition = -distanceBetweenPlatforms;
+//    	if (playerPositionX - lastPlatformPosition >= distanceBetweenPlatforms) {
+//    		easy_platform_rec = new Rectangle(getWidth(), 20);
+//            // Create a new platform
+//            Rectangle platform = new Rectangle(getWidth(), 20);
+//            easy_gamepane.getChildren().add(platform);
+//
+//            // Set the position of the new platform
+//            lastPlatformPosition += distanceBetweenPlatforms; // Update last position
+//            platform.setLayoutX(lastPlatformPosition);
+//            platform.setLayoutY(easy_gamepane.getHeight() - 20);
+//        }
+//    	
+//    }
+  
+    
 }
+
 
 
 //class MediumPlatform extends Platform {
