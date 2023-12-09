@@ -1,11 +1,13 @@
 package application;
 
 import application.Main.Stick;
+import javafx.application.Application;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
-public class StickController {
+public class StickController extends Application {
 	private Main main_obj = new Main(); 
     static Stick stick;
 
@@ -31,14 +33,19 @@ public class StickController {
     }
 
     private void startStickGrowth() {
-        stick.startStretch(); // Correctly start the stick growth animation
+         // Correctly start the stick growth animation
     }
 
     private void stopStickGrowth() {
-        stick.stopStretch(); // Stop the stick growth animation
+         // Stop the stick growth animation
     }
 
     public Stick getStick() {
         return stick;
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
     }
 }
