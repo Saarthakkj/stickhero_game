@@ -15,11 +15,6 @@
          </image>
       </ImageView>
       <Button layoutX="246.0" layoutY="1.0" mnemonicParsing="false" onAction="#switchTofirst_scrn" text="Home" />
-      <ImageView fx:id="plyr" fitHeight="88.0" fitWidth="183.0" layoutX="-60.0" layoutY="284.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@player3.png" />
-         </image>
-      </ImageView>
       <ImageView fx:id="cherry_counter" fitHeight="34.0" fitWidth="29.0" layoutX="26.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@cherry.png" />

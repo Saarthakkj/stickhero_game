@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -49,28 +51,6 @@ public class Main extends Application {
 		}
 		
 	}
-	
-	private void showSecondStage() {
-        // Create the second stage
-        Stage secondaryStage = new Stage();
-        secondaryStage.setTitle("Second Stage");
-        Button secondaryButton = new Button("Switch to Primary Stage");
-        secondaryButton.setOnAction(event -> showPrimaryStage());
-        Scene secondaryScene = new Scene(secondaryButton, 300, 200);
-        secondaryStage.setScene(secondaryScene);
-        
-        // Set the owner stage (optional but useful for modality)
-        secondaryStage.initOwner(stage);
-
-        // Show the second stage
-        secondaryStage.show();
-    }
-	
-	private void showPrimaryStage() {
-        // Bring the primary stage to the front if it's behind the secondary stage
-        stage.toFront();
-    }
-	
 
 	public static void main(String[] args) {
 		launch(args);
@@ -78,37 +58,37 @@ public class Main extends Application {
 	
 class Animations {
     private Stick stick;
-    private Player player;
+    //private Player player;
     private Cherry cherry;
 
     public Animations() {
         stick = new Stick();
-        player = new Player();
+        //player = new Player();
         cherry = new Cherry(0, 0);
 
-        // Set up mouse event handlers
-        stick.setOnMousePressed(this::handleMousePressed);
-        stick.setOnMouseReleased(this::handleMouseReleased);
+//        // Set up mouse event handlers
+//        stick.setOnMousePressed(this::handleMousePressed);
+//        stick.setOnMouseReleased(this::handleMouseReleased);
     }
 
-    private void handleMousePressed(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            startStickGrowth(); // Start stretching the stick
-        }
-    }
+//    private void handleMousePressed(MouseEvent event) {
+//        if (event.getButton() == MouseButton.PRIMARY) {
+//            startStickGrowth(); // Start stretching the stick
+//        }
+//    }
 
-    private void handleMouseReleased(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-            stopStickGrowth(); // Stop stretching the stick
-        }
-    }
-
-    private void startStickGrowth() {
-        stick.startStretch(); // Correctly start the stick growth animation
-    }
+//    private void handleMouseReleased(MouseEvent event) {
+//        if (event.getButton() == MouseButton.PRIMARY) {
+//            stopStickGrowth(); // Stop stretching the stick
+//        }
+//    }
+//
+//    private void startStickGrowth() {
+//        stick.startStretch(); // Correctly start the stick growth animation
+//    }
 
     private void stopStickGrowth() {
-        stick.stopStretch(); // Stop the stick growth animation
+        //stick.stopStretch(); // Stop the stick growth animation
         // Rotate the stick by 90 degrees when growth stops
         stick.setRotate(stick.getRotate() + 90);
     }
@@ -117,10 +97,10 @@ class Animations {
         return stick;
     }
 
-    private void player_moving() {
-        // Code to move the player using the player object
-        player.moveCharacter();
-    }
+//    private void player_moving() {
+//        // Code to move the player using the player object
+//        player.moveCharacter();
+//    }
 
     private void button_hovering() {
         // Code for button hovering animation
@@ -133,8 +113,51 @@ class Animations {
 }
 
 
+//animation of player:
+class Plyr extends ImageView {
+	
+	
+
+    private boolean isCollided;
+
+    public Plyr(Image image) {
+        super(image);
+    }
+
+    public void handleCollision() {
+        if (isCollided) {
+            // Assuming new coordinates for translation
+            double newX = getLayoutX() + 50;
+            double newY = getLayoutY() + 50;
+
+            // Create a TranslateTransition for the player ImageView
+            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), this);
+
+            // Set the new coordinates as the destination for translation
+            translateTransition.setToX(newX);
+            translateTransition.setToY(newY);
+
+            // Set up an event handler for when the animation finishes
+            translateTransition.setOnFinished(event -> {
+                // Code to execute after the animation finishes
+            });
+
+            // Play the translation animation
+            translateTransition.play();
+
+            // Reset the collision flag
+            isCollided = false;
+        }
+    }
+    
+    public void changeSize(double width, double height) {
+        this.setFitWidth(width);
+        this.setFitHeight(height);
+    }
+
+}
+
 //animated stick :
-//aniamted stick :
 class Stick extends Rectangle {
   private static final double MAX_HEIGHT = 300.0;
   private static final double GROWTH_STEP = 1.0;
@@ -142,7 +165,8 @@ class Stick extends Rectangle {
   private Timeline growthAnimation;
   private Timeline rotationAnimation;
   private boolean isGrowing = false; // Flag to manage the stick's growth state
-
+  public boolean isCOllided = false;
+  
   public Stick() {
       super(50, 340, 5, 10);
       this.setFill(Color.BLACK);
@@ -187,6 +211,9 @@ class Stick extends Rectangle {
   private void fall() {
       rotationAnimation.setOnFinished(event -> rotate());
       rotationAnimation.play();
+      rotationAnimation.setOnFinished(event -> {
+    	  isCOllided = true; // Set flag to true after rotation completes
+      });
   }
 
   private void rotate() {
@@ -198,36 +225,13 @@ class Stick extends Rectangle {
   public double getCurrentHeight() {
       return this.getHeight();
   }
+  
+  // Method to check if the stick has collided (completed its rotation)
+  public boolean hasCollided() {
+      return isCOllided;
+  }
 }
 
-
-// this is a demo stick class : (use it for later declaring methods.)
-//	class Stick {
-//	    private double length;
-//	    private double position;
-//
-//	    public void stretch() {
-//	        // Stretch the stick based on user input or animation
-//	        // Iterate the length
-//	    }
-//
-//	    public void fall() {
-//	        // Make the stick fall towards the target platform
-//	    }
-//
-//	    public double getLength() {
-//	        return length;
-//	    }
-//
-//	    public double getPosition() {
-//	        return position;
-//	    }
-//
-//	    // Reset method for restoring stick's length
-//	    public void reset() {
-//	        length = 0;
-//	    }
-//	}
 
 class Cherry {
     private Point2D location;
@@ -269,67 +273,6 @@ class CherryManager {
     }
 }
 
-class Player {
-    private CherryManager cherryManager;
-    private int revivalCost = 5;
-
-    public Player() {
-        this.cherryManager = cherryManager;
-    }
-
-    void moveCharacter() {
-        // Handles the movement of the stick-hero character between platforms
-    }
-
-    void stretchStick() {
-        // Stretches out the stick to bridge the gaps between platforms
-    }
-
-    void collectCherries() {
-        cherryManager.collectCherry();
-        // Collects cherries and increases cherry_count
-    }
-
-    void revive() {
-        if (cherryManager.getCherryCount() >= revivalCost) {
-            // Revive the player
-            cherryManager.useCherries(revivalCost);
-            // Additional logic for reviving the player goes here
-        } else {
-            // Display a message or take other actions if the player doesn't have enough cherries to revive
-        }
-    }
-
-    void flipCharacter() {
-        // Flips the character upside down to collect rewards
-    }
 }
 
-//	class StartGameScreen {
-//	    public void levelSelection() {
-//	        // Code for level selection screen
-//	    }
-//
-//	    public void startGame() {
-//	        // Code for the start game screen
-//	    }
-//	}
-//
-//	class DuringGameScreen {
-//	    public void duringGame() {
-//	        //Code for the game play  phase
-//	    }
-//	}
-//
-//	class EndGameScreen{
-//	    public void endGame() {
-//	        // Code for the end game screen
-//	    }
-//	}
-	
-}
-//		we need a root node in the constructor of scene
-//		Basic type of root node: group
-		
-		
 
