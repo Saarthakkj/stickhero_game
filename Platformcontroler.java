@@ -1,18 +1,8 @@
 package application;
 
-import java.io.IOException;
-
-import application.Main.Plyr;
-import application.Main.Stick;
+import application.main.Plyr;
+import application.main.Stick;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

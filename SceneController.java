@@ -1,9 +1,7 @@
 package application;
 
-import java.io.IOException;
-
-import application.Main.Plyr;
-import application.Main.Stick;
+import application.main.Plyr;
+import application.main.Stick;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.animation.AnimationTimer;
+
+
+
+import java.io.IOException;
 
 public class SceneController {
 	@FXML
@@ -85,7 +86,7 @@ public class SceneController {
         
         Pane easy_gamepane = (Pane) loader.load();
         
-        Main main_obj = new Main();
+        main main_obj = new main();
         
         Stick stick = main_obj.new Stick() ; // Create the stick        
         
@@ -96,21 +97,38 @@ public class SceneController {
         
         EasyPlatform easyPlatform = new EasyPlatform(easy_gamepane, stick , 100 , plyr); // Initialize EasyPlatform with the stick
 
-        Scene scene = new Scene(easy_gamepane);
+
+
+		AnimationTimer animationTimer = new AnimationTimer() {
+			private long lastUpdate = 0;
+
+			@Override
+			public void handle(long now) {
+				if (now - lastUpdate >= 100_000_000) { // Delay of 100 milliseconds
+					// Update player's position here
+					plyr.move(25); // Assuming you have a move() method in the Plyr class
+					lastUpdate = now;
+				}
+			}
+		};
+
+		Scene scene = new Scene(easy_gamepane);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
+
         easyPlatform.initializeAnimationTimer();	
         easyPlatform.setCollision(true);
-        //easyPlatform.initializePlatforms();
-    }
+
+		animationTimer.start();
+	}
 	public void switchTomed_gameplay(ActionEvent event) throws IOException 
 	{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("med_gameplay.fxml"));
         
         Pane med_gamepane = (Pane) loader.load();
         
-        Main main_obj = new Main();
+        main main_obj = new main();
         
         Stick stick = main_obj.new Stick() ; // Create the stick        
         
@@ -136,7 +154,7 @@ public class SceneController {
         
         Pane hard_gamepane = (Pane) loader.load();
         
-        Main main_obj = new Main();
+        main main_obj = new main();
         
         Stick stick = main_obj.new Stick() ; // Create the stick        
         
