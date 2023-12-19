@@ -1,20 +1,14 @@
 package application;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -22,10 +16,9 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-import application.Main.Stick;
+//TODO: create a junit testing file.
 
-
-public class Main extends Application {
+public class main extends Application {
 		
 	private Stage stage;
 	
@@ -115,46 +108,54 @@ class Animations {
 
 //animation of player:
 class Plyr extends ImageView {
-	
-	
-
     private boolean isCollided;
 
     public Plyr(Image image) {
         super(image);
     }
 
-    public void handleCollision() {
-        if (isCollided) {
-            // Assuming new coordinates for translation
-            double newX = getLayoutX() + 50;
-            double newY = getLayoutY() + 50;
+//    public void handleCollision() {
+//        if (isCollided) {
+//            // Assuming new coordinates for translation
+//            double newX = getLayoutX() + 50;
+//            double newY = getLayoutY() + 50;
+//
+//            // Create a TranslateTransition for the player ImageView
+//            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), this);
+//
+//            // Set the new coordinates as the destination for translation
+//            translateTransition.setToX(newX);
+//            translateTransition.setToY(newY);
+//
+//            // Set up an event handler for when the animation finishes
+//            translateTransition.setOnFinished(event -> {
+//                // Code to execute after the animation finishes
+//            });
+//
+//            // Play the translation animation
+//            translateTransition.play();
+//
+//            // Reset the collision flag
+//            isCollided = false;
+//        }
+//    }
 
-            // Create a TranslateTransition for the player ImageView
-            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), this);
-
-            // Set the new coordinates as the destination for translation
-            translateTransition.setToX(newX);
-            translateTransition.setToY(newY);
-
-            // Set up an event handler for when the animation finishes
-            translateTransition.setOnFinished(event -> {
-                // Code to execute after the animation finishes
-            });
-
-            // Play the translation animation
-            translateTransition.play();
-
-            // Reset the collision flag
-            isCollided = false;
+    public void move(double dest){
+        // Update the player's position here
+        // You can modify this code to move the player in the desired way
+        double currentX = getX();
+        double newX = currentX;
+        while(newX<dest) {
+            newX = newX + 1; // deltaX is the amount to move in the x-direction
         }
-    }
+        setX(newX);
+    };
+
     
     public void changeSize(double width, double height) {
         this.setFitWidth(width);
         this.setFitHeight(height);
     }
-
 }
 
 //animated stick :
@@ -165,7 +166,7 @@ class Stick extends Rectangle {
   private Timeline growthAnimation;
   private Timeline rotationAnimation;
   private boolean isGrowing = false; // Flag to manage the stick's growth state
-  public boolean isCOllided = false;
+  public boolean isCollided = false;
   
   public Stick() {
       super(50, 340, 5, 10);
@@ -212,7 +213,7 @@ class Stick extends Rectangle {
       rotationAnimation.setOnFinished(event -> rotate());
       rotationAnimation.play();
       rotationAnimation.setOnFinished(event -> {
-    	  isCOllided = true; // Set flag to true after rotation completes
+    	  isCollided = true; // Set flag to true after rotation completes
       });
   }
 
@@ -228,7 +229,7 @@ class Stick extends Rectangle {
   
   // Method to check if the stick has collided (completed its rotation)
   public boolean hasCollided() {
-      return isCOllided;
+      return isCollided;
   }
 }
 
