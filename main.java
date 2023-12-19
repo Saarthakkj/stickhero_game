@@ -2,7 +2,6 @@ package application;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -115,31 +114,31 @@ class Plyr extends ImageView {
         super(image);
     }
 
-    public void handleCollision() {
-        if (isCollided) {
-            // Assuming new coordinates for translation
-            double newX = getLayoutX() + 50;
-            double newY = getLayoutY() + 50;
-
-            // Create a TranslateTransition for the player ImageView
-            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), this);
-
-            // Set the new coordinates as the destination for translation
-            translateTransition.setToX(newX);
-            translateTransition.setToY(newY);
-
-            // Set up an event handler for when the animation finishes
-            translateTransition.setOnFinished(event -> {
-                // Code to execute after the animation finishes
-            });
-
-            // Play the translation animation
-            translateTransition.play();
-
-            // Reset the collision flag
-            isCollided = false;
-        }
-    }
+//    public void handleCollision() {
+//        if (isCollided) {
+//            // Assuming new coordinates for translation
+//            double newX = getLayoutX() + 50;
+//            double newY = getLayoutY() + 50;
+//
+//            // Create a TranslateTransition for the player ImageView
+//            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1), this);
+//
+//            // Set the new coordinates as the destination for translation
+//            translateTransition.setToX(newX);
+//            translateTransition.setToY(newY);
+//
+//            // Set up an event handler for when the animation finishes
+//            translateTransition.setOnFinished(event -> {
+//                // Code to execute after the animation finishes
+//            });
+//
+//            // Play the translation animation
+//            translateTransition.play();
+//
+//            // Reset the collision flag
+//            isCollided = false;
+//        }
+//    }
 
     public void move(double dest){
         // Update the player's position here
@@ -167,7 +166,7 @@ class Stick extends Rectangle {
   private Timeline growthAnimation;
   private Timeline rotationAnimation;
   private boolean isGrowing = false; // Flag to manage the stick's growth state
-  public boolean isCOllided = false;
+  public boolean isCollided = false;
   
   public Stick() {
       super(50, 340, 5, 10);
@@ -214,7 +213,7 @@ class Stick extends Rectangle {
       rotationAnimation.setOnFinished(event -> rotate());
       rotationAnimation.play();
       rotationAnimation.setOnFinished(event -> {
-    	  isCOllided = true; // Set flag to true after rotation completes
+    	  isCollided = true; // Set flag to true after rotation completes
       });
   }
 
@@ -230,7 +229,7 @@ class Stick extends Rectangle {
   
   // Method to check if the stick has collided (completed its rotation)
   public boolean hasCollided() {
-      return isCOllided;
+      return isCollided;
   }
 }
 

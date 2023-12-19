@@ -95,7 +95,7 @@ public class SceneController {
         Image playerImage = new Image(getClass().getResourceAsStream("player5.png"));        
         Plyr plyr = main_obj.new Plyr(playerImage);
         
-        EasyPlatform easyPlatform = new EasyPlatform(easy_gamepane, stick , 100 , plyr); // Initialize EasyPlatform with the stick
+        EasyPlatform easyPlatform = new EasyPlatform(easy_gamepane, stick ,  plyr); // Initialize EasyPlatform with the stick
 
 
 
@@ -104,9 +104,9 @@ public class SceneController {
 
 			@Override
 			public void handle(long now) {
-				if (now - lastUpdate >= 100_000_000) { // Delay of 100 milliseconds
+				if (now - lastUpdate >= 1000000) {
 					// Update player's position here
-					plyr.move(25); // Assuming you have a move() method in the Plyr class
+					plyr.move(easyPlatform.width -30); // Assuming you have a move() method in the Plyr class
 					lastUpdate = now;
 				}
 			}
@@ -116,11 +116,8 @@ public class SceneController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
-
-        easyPlatform.initializeAnimationTimer();	
-        easyPlatform.setCollision(true);
-
 		animationTimer.start();
+		easyPlatform.start_animation();
 	}
 	public void switchTomed_gameplay(ActionEvent event) throws IOException 
 	{
